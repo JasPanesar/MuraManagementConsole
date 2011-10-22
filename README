@@ -1,1 +1,41 @@
-I am the mura Management Console
+Mura Management Console
+-----------------------
+
+Jas Panesar
+
+Alpha 0.1
+
+Wish Mura was a little quicker and easier to setup for a new project?
+
+Mura Management Console is my attempt to solve my burning need to do very little when setting up a new Mura project.
+
+CURRENTLY:
+
+Setting up a new Mura site is a bit more work than I want it to be.
+
+- Setup local repo
+- Set it up on Github
+- Download and Install Mura
+- Activate Mura from setup screen
+- Create Datasource
+- Create Database and DB Users
+
+- Create seperate repo for any plugin
+- Maintain two repos, one for the site, and one repo for the plugin for that site with its' custom functionality.
+
+WHAT I WANT:
+
+- One screen, with one button. I enter in my project name, maybe some optional information, and MMC will setup an entire copy of Mura for me, with version control in place.  The very next thing I do after running MMC is login to the admin... or start coding.
+- If possible, I'd rather have one long file containing everything making it easy to move around.
+
+POTENTIAL CAVEATS:
+
+- MMC would have to be installed in your webroot so you can use it via a browser to deploy more Mura instances.
+
+ROADMAP: 
+
+- Systemically eliminate every step.  I have bash scripts working locally to do most of the steps but putting it into a CFM script will get me going where I want.
+
+LICENSE:
+
+- You can hold me accountable as much as you paid for the code.
