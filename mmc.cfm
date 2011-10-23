@@ -2,6 +2,8 @@
 
 	I AM THE ONE FILE, MAGICAL, MEGA MURA MANAGEMENT CONSOLE.  Of course I should be a nicely organized folder based app, but I like being dropped in anywhere and just working.
 
+	This file has been hacked together in a few hour setting.  Still have to clean it up but I don't mind putting it out there if you'll look past any eyesores for now.
+
 	--->
 
 
@@ -12,9 +14,7 @@
 
 		HTML RENDERER - Renders each screen
 
-		LAYOUT FUNCTIONS --> Provides 
-
-	--->
+		LAYOUT FUNCTIONS --> Provides --->
 
 
 <!--- MMC SETUP --->
@@ -131,9 +131,26 @@
 
 			<cfcase value = "main.license">
 
-			          This project is not from Blue River. But I dedicate it to them for making my life easier. <br/>
-			          (Maybe it will be one day.) <br/> 
-			          For now it's just about making my life easier, and for anyone else who might benefit from it.</p>
+
+					I haven't figured out which license I want to release this under yet.  <br /><br />
+
+					But, I want to release it.  So, like many things I could leave this sitting in the dark somewhere.  But it's too cool to leave it in the dark.<br />
+
+					Here's my own license so far until I have a chance to familiarize myself with the license I'd like and pick it.<br /><br />
+					
+					Any issues or questions, please contact me from my blog (<a href = "http://www.panesar.net">http://www.panesar.net</a>) and it will help me along to get this part cleared up a bit more.<br /><br />
+
+					- You can use this at your own peril.  <br />
+					- You can't sell or redistribute it as part of a product or service.<br />
+					- You can't take credit for it.<br />
+					- If you install and try to use this, I am liable to the amount that you paid me for it (nothing).<br /><br />
+			
+					Lastly, this project is not from Blue River. But I dedicate it to them for making my life easier. <br />
+			          (Maybe it will be one day.) <br/> <br />
+			          For now it's just about making my life easier, and for anyone else who might benefit from it.<br /><br />
+
+			          Hope you enjoy,<br />
+			          Jas</p>
 
 			</cfcase>
 
@@ -252,19 +269,21 @@
 
 			          <div class="span4">
 			            <h2>What this is.</h2>
-			            <p>This is a one file console.<br /><br />
+			            <p>This is a one file console.<br />
+			            Nothing to install, configure, or map.<br /><br />
 			             Drop it in any folder and click<br />
 			             <a href = "?action=main.newSite">Install New Site</a>.<br/><br/></p>
 			            <p><a class="btn primary large" href="?action=main.newSite">Install new site &raquo;</a></p>
 			         </div>
 
 			         <div class="span6">
-			            <h2>Requirements</h2>
-			            <p>I've developed this with the following available:
+			            <h2>What you need.</h2>
+			            <p>I've developed this with the following available.<br/>Your help is welcome to confirm other environments.<br/>
 			            <ul>
 				            <li><a href = "http://www.adobe.com/products/coldfusion-family.html">Adobe ColdFusion 9</a> on Mac OSX 10.6.8</li>
+				            <li>Access to the <a href = "http://help.adobe.com/en_US/ColdFusion/9.0/CFMLRef/WSc3ff6d0ea77859461172e0811cbec22c24-7d56.html">cfexecute</a> tag</li>
 				            <li><a href = "http://curl.haxx.se/">Curl</a> available on the command line</li>
-				            <li>mysql available from the command line</li>
+				            <li>If you're creating databases, <a href = "http://www.mysql.com">mysql</a> available from the command line</li>
 				        </ul>
           				</p>
 			            <p><a class="btn" href="##">View details &raquo;</a></p>
