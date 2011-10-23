@@ -30,7 +30,7 @@
 
 
 <!--- HTML RENDERER START --->
-<!--- my job is to render a screen --->
+<!--- HTML RENDERER RENDERS EVERY SCREEN --->
 
 
 	<!DOCTYPE html>
@@ -119,43 +119,29 @@
 			
 			<cfcase value = "main.home">
 				
-			        <!-- Main hero unit for a primary marketing message or call to action -->
-			        <div class="hero-unit">
-			          <h1>Hi. </h1>
-			          <p>This is my unofficial Mura Management Console.  <br/>
-
-			   
-			          It's not related to Blue River. But I dedicate it to them for making my life easier. Maybe it will be one day. <br/> 
-			          For now it's just about making developers (my) life easier.</p>
-			          <!---<p><a class="btn primary large">Learn more &raquo;</a></p>--->
-			        </div>
-
-			        <!-- Example row of columns -->
-			        <div class="row">
-			          <div class="span5">
-			            <h2>What I needed.</h2>
-			            <p>I want to use Mura for my litle projects.  But getting a plugin or a new site deployed can take a bit of time.  A bit of time I end up not taking</p>
-			            <p><a class="btn medium" href="##">View details &raquo;</a></p>
-			          </div>
-			          <div class="span6">
-			            <h2>What this is.</h2>
-			             <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
-			            <p><a class="btn primary large" href="##">View details &raquo;</a></p>
-			         </div>
-			          <div class="span5">
-			            <h2>How it works.</h2>
-			             <p>This started as a series of command line script files that did everything for me.  As I kept adding I slowly realized it would be nice to have some CF  </p>
-			            <p><a class="btn" href="##">View details &raquo;</a></p>
-			         </div>			         
-			        </div>
-
-			        <hr>
-
+				#getMainHome()#
 
 			</cfcase>
 
 			<cfcase  value = "main.contact">
 				I am main.contact
+			</cfcase>
+
+
+
+			<cfcase value = "main.license">
+
+			          This project is not from Blue River. But I dedicate it to them for making my life easier. <br/>
+			          (Maybe it will be one day.) <br/> 
+			          For now it's just about making my life easier, and for anyone else who might benefit from it.</p>
+
+			</cfcase>
+
+
+			<cfcase  value = "main.requirements">
+
+					Requirements will go here.  For now I've listed them on the front page
+			
 			</cfcase>
 
 		</cfswitch>
@@ -195,21 +181,11 @@
 	<cffunction name="renderFooter" returntype="any" access="private" output="true" hint="I get the footer of the layout">
 
 
-			<!-- Topbar
+			<!-- Footer
 		    ================================================== -->
-		    <div class="topbar">
-		      <div class="topbar-inner">
-		        <div class="container-fluid">
-		          <a class="brand" href="?action=main.home">Mura Management Console</a>
-		          <ul class="nav">
-		            <li class="active"><a href="?action=main.home">Home</a></li>
-		            <li><a href="?action=main.newSite">Install New Site</a></li>
-		            <li><a href="?action=main.contact">Contact</a></li>
-		          </ul>
-		          <p class="pull-right">Version #mmcVersion#</p>
-		        </div>
-		      </div>
-			    </div>
+	        <footer>
+	          <p>&copy; Jas Panesar</p>
+	        </footer>
 
 	</cffunction>
 
@@ -220,18 +196,19 @@
 
 	  <div class="sidebar">
         <div class="well">
-          <h5>Create new Site</h5>
+          <h5>My Mura Console</h5>
           <ul>
             <li><a href = "##" >Link</a></li>
             <li><a href = "##" >Link</a></li>
             <li><a href = "##" >Link</a></li>
             <li><a href = "##" >Link</a></li>
           </ul>
-          <h5>Sidebar</h5>
 
           <h5>About</h5>
           <ul>
+            <li><a href = "?action=main.license">Requirements</a></li>          
             <li><a href = "?action=main.contact">Contact</a></li>
+            <li><a href = "?action=main.license">License</a></li>
           </ul>
         </div>
       </div>
@@ -244,6 +221,63 @@
 
 <!--- LAYOUT FUNCTIONS END --->
 
+
+
+
+
+<!--- CONTENT FUNCTIONS START --->
+
+	<cffunction name="getMainHome" returntype="any" hint="I get the content for main.home">
+		
+		        <!-- Main hero unit for a primary marketing message or call to action -->
+			        <div class="hero-unit">
+			          <h1>Hi, this is my unofficial<br /> Mura Management Console. </h1>
+			          <p> 
+			   		  	MMC setups a New installation of Mura for you locally.<br/>
+			   		  	In the process it creates a repo online, checks it out locally, and then downloads the latest Mura into it.<br />
+			   		  	If you need a database setup, it will do that for you.<br />
+			   			Eventually, I want it to do everything for me including auto-install Mura and install a plugin for me<br />
+			          <!---<p><a class="btn primary large">Learn more &raquo;</a></p>--->
+			        </div>
+
+			        <!-- First row of columns -->
+			        <div class="row">
+			          <div class="span6">
+			            <h2>What I needed.</h2>
+			            <p>I wanted to setup new Mura projects quicker. <br /><br />
+			            After building shortcut command line scripts,<br />
+			            I slowly realized it would be nice to have some CF commands tied in.<br/><br/>
+			            I decided to build this console where I could setup a new site in a few clicks.</p>
+			          </div>
+
+			          <div class="span4">
+			            <h2>What this is.</h2>
+			            <p>This is a one file console.<br /><br />
+			             Drop it in any folder and click<br />
+			             <a href = "?action=main.newSite">Install New Site</a>.<br/><br/></p>
+			            <p><a class="btn primary large" href="?action=main.newSite">Install new site &raquo;</a></p>
+			         </div>
+
+			         <div class="span6">
+			            <h2>Requirements</h2>
+			            <p>I've developed this with the following available:
+			            <ul>
+				            <li><a href = "http://www.adobe.com/products/coldfusion-family.html">Adobe ColdFusion 9</a> on Mac OSX 10.6.8</li>
+				            <li><a href = "http://curl.haxx.se/">Curl</a> available on the command line</li>
+				            <li>mysql available from the command line</li>
+				        </ul>
+          				</p>
+			            <p><a class="btn" href="##">View details &raquo;</a></p>
+			         </div>	
+			          
+			        </div>
+
+			        <hr>
+
+
+	</cffunction>
+
+<!--- CONTENT FUNCTIONS END --->
 
 
 
