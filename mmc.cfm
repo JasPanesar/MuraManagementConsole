@@ -310,6 +310,11 @@
 			          Jas</p>
 	</cffunction>
 
+
+	<cffunction name="getMainRequirements" returntype="any" output="true" hint="I display the requirements">
+							Requirements will go here.  For now I've listed them on the front page
+	</cffunction>
+
 <!--- CONTENT FUNCTIONS END --->
 
 
