@@ -198,10 +198,10 @@
         <div class="well">
           <h5>My Mura Console</h5>
           <ul>
+            <!---<li><a href = "##" >Link</a></li>
             <li><a href = "##" >Link</a></li>
             <li><a href = "##" >Link</a></li>
-            <li><a href = "##" >Link</a></li>
-            <li><a href = "##" >Link</a></li>
+            <li><a href = "##" >Link</a></li>--->
           </ul>
 
           <h5>About</h5>
@@ -313,7 +313,29 @@
 
 	<cffunction name="getMainNewSite" returntype="any" output="true" hint="I display the create new site screen" >
 		
-		Let's create a new site
+		<h1>Let's create a new site</h1>
+
+			        <!-- First row of columns -->
+			        <div class="row">
+			          <div class="span6">
+			            <h2>What's it called?</h2>
+			            <p>First we need to name our project.<br /><br />
+			            This means you'll just have to pick a nice name.</p>
+			          </div>
+
+			          <div class="span8">
+			            <br/><br/>
+			            <h3>Project Name</h3>
+			            <p></p>
+
+			             <p><a class="btn primary large" href="?action=main.newSite">Install new site &raquo;</a></p>
+
+			           
+			         </div>
+
+			        
+			          
+			        </div>
 
 	</cffunction>
 
