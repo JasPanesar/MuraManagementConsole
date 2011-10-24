@@ -233,6 +233,9 @@
 
 <!--- CONTENT FUNCTIONS START --->
 
+	<!--- this is the content that's displayed in each page by the renderContent() function
+			which looks up based on action --->
+
 
 	<cffunction name="getMainContact" returntype="any" output="true" hint="I display contact info in page">
 		Contact Jas via www.panesar.net.
