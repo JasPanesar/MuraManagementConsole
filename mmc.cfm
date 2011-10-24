@@ -118,20 +118,28 @@
 		<cfswitch expression = "#arguments.action#">
 			
 			<cfcase value = "main.home">
+				<!--- I display the main home page of MMC --->
 				
 				#getMainHome()#
 
 			</cfcase>
 
 			<cfcase  value = "main.contact">
+				<!--- I display the contact information --->
 				
 				#getMainContact()#
 
 			</cfcase>
 
 
+			<cfcase  value = "main.createSite">
+				<!--- I create the site after main.newSite posts to me --->
+
+			</cfcase>
+
 
 			<cfcase value = "main.license">
+				<!--- I display the license --->
 
 				#getMainLicense()#
 
@@ -139,6 +147,7 @@
 
 
 			<cfcase  value = "main.newSite">
+				<!--- I show the form to create a new site --->
 
 				#getMainNewSite()#
 				
@@ -146,6 +155,7 @@
 
 
 			<cfcase  value = "main.requirements">
+				<!--- I display the requirements for MMC --->
 
 				#getMainRequirements()#
 			
@@ -333,6 +343,10 @@
 								<cfinput class = "xlarge" id = "projectName" name = "projectName" size = "30" type = "text" />
 							</div>
 						</div><!-- /clearfix -->
+
+						<h3>Where should I create the repo?</h3>
+			            <p>So far Bitbucket is supported, GitHub coming.</p>
+
 
    						  <p><a class = "btn primary large"  href = "?action=main.newSite">Install new site &raquo;</a></p>
 
