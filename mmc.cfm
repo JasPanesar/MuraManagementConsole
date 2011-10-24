@@ -20,13 +20,8 @@
 <!--- MMC SETUP --->
 	<cfset mmcVersion = "0.01">
 
-	<!--- make sure there's a url.action somewhere --->
-	<cfif isDefined ( "url.action" )>
-		<!--- do nothing because we have an action --->
-	<cfelse>
-		<!--- we don't have a url action --->
-		<cfset url.action = "main.home" />
-	</cfif>
+	<!--- Set up a default view --->
+	<cfparam name="url.action" default="main.home" />
 
 
 <!--- HTML RENDERER START --->
