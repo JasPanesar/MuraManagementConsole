@@ -119,7 +119,9 @@
 			</cfcase>
 
 			<cfcase  value = "main.contact">
-				I am main.contact
+				
+				#getMainContact()#
+
 			</cfcase>
 
 
@@ -132,25 +134,20 @@
 
 
 			<cfcase  value = "main.newSite">
-				
 
+				#getMainNewSite()#
+				
 			</cfcase>
 
 
 			<cfcase  value = "main.requirements">
 
-					Requirements will go here.  For now I've listed them on the front page
+				#getMainRequirements()#
 			
 			</cfcase>
 
 		</cfswitch>
-
-
-
-
-
-
-		
+	
 	</cffunction>
 
 
@@ -179,7 +176,6 @@
 	<!--- I GET THE FOOTER --->
 	<cffunction name="renderFooter" returntype="any" access="private" output="true" hint="I get the footer of the layout">
 
-
 			<!-- Footer
 		    ================================================== -->
 	        <footer>
@@ -197,10 +193,10 @@
         <div class="well">
           <h5>My Mura Console</h5>
           <ul>
+            <!---<li><a href = "##" >Link</a></li>
             <li><a href = "##" >Link</a></li>
             <li><a href = "##" >Link</a></li>
-            <li><a href = "##" >Link</a></li>
-            <li><a href = "##" >Link</a></li>
+            <li><a href = "##" >Link</a></li>--->
           </ul>
 
           <h5>About</h5>
@@ -214,10 +210,6 @@
 		
 	</cffunction>
 
-
-
-
-
 <!--- LAYOUT FUNCTIONS END --->
 
 
@@ -225,6 +217,14 @@
 
 
 <!--- CONTENT FUNCTIONS START --->
+
+	<!--- this is the content that's displayed in each page by the renderContent() function
+			which looks up based on action --->
+
+
+	<cffunction name="getMainContact" returntype="any" output="true" hint="I display contact info in page">
+		Contact Jas via www.panesar.net.
+	</cffunction>
 
 	<cffunction name="getMainHome" returntype="any" hint="I get the content for main.home">
 		
@@ -282,9 +282,9 @@
 	<cffunction name="getMainLicense" returntype="any" output="true" hint="I contain the license info">
 							I haven't figured out which license I want to release this under yet.  <br /><br />
 
-					Additionally Sean Walsh has contributed / is working on helping getting plugins specifically deploying remotely.  I'll have to sort his contributions out part with him.
+					Additionally Sean Walsh has contributed / is working on helping getting plugins specifically deploying remotely.  I'll have to sort his contributions out part with him.<br /><br />
 
-					But, I want to release it.  So, like many things I could leave this sitting in the dark somewhere.  But it's too cool to leave it in the dark.<br />
+					Despite this, if you're one of 4 people in the world looking at this, I want to release it. It's too cool to leave it in the dark.<br />
 
 					Here's my own license so far until I have a chance to familiarize myself with the license I'd like and pick it.<br /><br />
 					
@@ -303,6 +303,50 @@
 
 			          Hope you enjoy,<br />
 			          Jas</p>
+	</cffunction>
+
+
+	<cffunction name="getMainNewSite" returntype="any" output="true" hint="I display the create new site screen" >
+		
+		<h1>Let's create a new site</h1>
+
+
+			<cfform name="frmInstallNewSite" action="?action=main.createSite">
+				
+			
+
+			        <!-- First row of columns -->
+			        <div class = "row">
+			          <div class = "span6">
+			            <h3>What's it called?</h3>
+			            <p>First we need to name our project folder.<br />
+			            Pick a nice name. NoSpaces.</p>
+
+			            <div class = "clearfix">
+							<label for = "xlInput">Project Name:</label>
+							<div class = "input">
+								<cfinput class = "xlarge" id = "projectName" name = "projectName" size = "30" type = "text" />
+							</div>
+						</div><!-- /clearfix -->
+
+   						  <p><a class = "btn primary large"  href = "?action=main.newSite">Install new site &raquo;</a></p>
+
+
+
+
+			          </div>
+
+
+
+	        </cfform>
+			          
+			        </div>
+
+	</cffunction>
+
+
+	<cffunction name = "getMainRequirements" returntype = "any" output = "true" hint = "I display the requirements">
+							Requirements will go here.  For now I've listed them on the front page
 	</cffunction>
 
 <!--- CONTENT FUNCTIONS END --->
