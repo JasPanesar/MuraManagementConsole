@@ -126,40 +126,13 @@
 
 			<cfcase value = "main.license">
 
-
-					I haven't figured out which license I want to release this under yet.  <br /><br />
-
-					Additionally Sean Walsh has contributed / is working on helping getting plugins specifically deploying remotely.  I'll have to sort his contributions out part with him.
-
-					But, I want to release it.  So, like many things I could leave this sitting in the dark somewhere.  But it's too cool to leave it in the dark.<br />
-
-					Here's my own license so far until I have a chance to familiarize myself with the license I'd like and pick it.<br /><br />
-					
-					Any issues or questions, please contact me from my blog (<a href = "http://www.panesar.net">http://www.panesar.net</a>) and it will help me along to get this part cleared up a bit more.<br /><br />
-
-					- You can use this at your own peril.  <br />
-					- Don't change credit for this project
-					- Don't sell this
-					- Feel free to learn from this and make it yours
-					- If you want to re-distribute contact me for now until I pick a proper license.
-					- If you install and try to use this, I am liable to the amount that you paid me for it (nothing).<br /><br />
-			
-					Lastly, this project is not from Blue River. But I dedicate it to them for making my life easier. ;) <br />
-			          (Maybe it will be one day.) <br/> <br />
-			          For now it's just about making my life easier, and for anyone else who might benefit from it.<br /><br />
-
-			          Hope you enjoy,<br />
-			          Jas</p>
+				#getMainLicense()#
 
 			</cfcase>
 
 
 			<cfcase  value = "main.newSite">
 				
-				<div id = "well">
-						
-
-				</div>
 
 			</cfcase>
 
@@ -303,6 +276,33 @@
 			        <hr>
 
 
+	</cffunction>
+
+
+	<cffunction name="getMainLicense" returntype="any" output="true" hint="I contain the license info">
+							I haven't figured out which license I want to release this under yet.  <br /><br />
+
+					Additionally Sean Walsh has contributed / is working on helping getting plugins specifically deploying remotely.  I'll have to sort his contributions out part with him.
+
+					But, I want to release it.  So, like many things I could leave this sitting in the dark somewhere.  But it's too cool to leave it in the dark.<br />
+
+					Here's my own license so far until I have a chance to familiarize myself with the license I'd like and pick it.<br /><br />
+					
+					Any issues or questions, please contact me from my blog (<a href = "http://www.panesar.net">http://www.panesar.net</a>) and it will help me along to get this part cleared up a bit more.<br /><br />
+
+					- You can use this at your own peril.  <br />
+					- Don't change credit for this project
+					- Don't sell this
+					- Feel free to learn from this and make it yours
+					- If you want to re-distribute contact me for now until I pick a proper license.
+					- If you install and try to use this, I am liable to the amount that you paid me for it (nothing).<br /><br />
+			
+					Lastly, this project is not from Blue River. But I dedicate it to them for making my life easier. ;) <br />
+			          (Maybe it will be one day.) <br/> <br />
+			          For now it's just about making my life easier, and for anyone else who might benefit from it.<br /><br />
+
+			          Hope you enjoy,<br />
+			          Jas</p>
 	</cffunction>
 
 <!--- CONTENT FUNCTIONS END --->
