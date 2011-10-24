@@ -246,10 +246,11 @@
 	</cffunction>
 
 
-	<cffunction name="getMainHome" returntype="any" hint="I get the content for main.home">
+	<cffunction name = "getMainHome" returntype = "any" 
+				hint = "I get the content for main.home">
 		
 		        <!-- Main hero unit for a primary marketing message or call to action -->
-			        <div class="hero-unit">
+			        <div class = "hero-unit">
 			          <h1>Hi, this is an unofficial<br /> Mura Management Console. </h1>
 			          <p> 
 			   		  	MMC setups a New installation of Mura for you locally.<br/>
@@ -260,8 +261,8 @@
 			        </div>
 
 			        <!-- First row of columns -->
-			        <div class="row">
-			          <div class="span6">
+			        <div class = "row">
+			          <div class = "span6">
 			            <h2>What I needed.</h2>
 			            <p>I wanted to setup new Mura projects quicker. <br /><br />
 			            After building shortcut command line scripts,<br />
@@ -269,16 +270,16 @@
 			            I decided to build this console where I could setup a new site in a few clicks.</p>
 			          </div>
 
-			          <div class="span4">
+			          <div class = "span4">
 			            <h2>What this is.</h2>
 			            <p>This is a one file console.<br />
 			            Nothing to install, configure, or map.<br /><br />
 			             Drop it in any folder and click<br />
 			             <a href = "?action=main.newSite">Install New Site</a>.<br/><br/></p>
-			            <p><a class="btn primary large" href="?action=main.newSite">Install new site &raquo;</a></p>
+			            <p><a class = "btn primary large" href = "?action=main.newSite">Install new site &raquo;</a></p>
 			         </div>
 
-			         <div class="span6">
+			         <div class = "span6">
 			            <h2>What you need.</h2>
 			            <p>I've developed this with the following available.<br/>Your help is welcome to confirm other environments.<br/>
 			            <ul>
@@ -288,7 +289,7 @@
 				            <li>If you're creating databases, <a href = "http://www.mysql.com">mysql</a> available from the command line</li>
 				        </ul>
           				</p>
-			            <p><a class="btn" href="##">View details &raquo;</a></p>
+			            <p><a class = "btn" href = "?action=main.requirements">View details &raquo;</a></p>
 			         </div>	
 			          
 			        </div>
@@ -299,7 +300,8 @@
 	</cffunction>
 
 
-	<cffunction name="getMainLicense" returntype="any" output="true" hint="I contain the license info">
+	<cffunction name="getMainLicense" returntype="any" output="true" 
+				hint="I contain the license info">
 							I haven't figured out which license I want to release this under yet.  <br /><br />
 
 					Additionally Sean Walsh has contributed / is working on helping getting plugins specifically deploying remotely.  I'll have to sort his contributions out part with him.<br /><br />
@@ -326,12 +328,13 @@
 	</cffunction>
 
 
-	<cffunction name="getMainNewSite" returntype="any" output="true" hint="I display the create new site screen" >
+	<cffunction name = "getMainNewSite" returntype = "any" output = "true" 
+				hint = "I display the create new site screen" >
 		
 		<h1>Let's create a new site</h1>
 
 
-			<cfform name="frmInstallNewSite" action="?action=main.createSite">
+			<cfform name = "frmInstallNewSite" action = "?action=main.createSite">
 				
 			
 
@@ -353,7 +356,7 @@
 			            <p>So far Bitbucket is supported, GitHub coming.</p>
 
 			            
-			            <cfinput name="btnSubmit" id="btnSubmit" type="submit" class = "btn primary xlarg" value="Install New Site" />
+			            <cfinput name = "btnSubmit" id = "btnSubmit" type = "submit" class = "btn primary xlarg" value = "Install New Site" />
 
    						 <!--- hide away pretty button <p><a class = "btn primary large"  href = "?action=main.newSite">Install new site &raquo;</a></p> --->
 
@@ -368,7 +371,8 @@
 	</cffunction>
 
 
-	<cffunction name = "getMainRequirements" returntype = "any" output = "true" hint = "I display the requirements">
+	<cffunction name = "getMainRequirements" returntype = "any" output = "true" 
+				hint = "I display the requirements">
 							Requirements will go here.  For now I've listed them on the front page
 	</cffunction>
 
@@ -378,7 +382,7 @@
 <!--- CONSOLE FUNCTIONS START --->
 
 	<cffunction name = "installMura" returntype = "any" output = "false" 
-			hint = "I download and extract the latest version of Mura to a user-specified directory">
+				hint = "I download and extract the latest version of Mura to a user-specified directory">
 
 		<cfset var fullInstallPath = '' />
 		<cfset var zipFile = '' />
@@ -398,7 +402,7 @@
 	</cffunction>
 
 	<cffunction name = "createMuraInstallDirectory" returntype = "any" output = "false" 
-			hint = "I create the new directory">
+				hint = "I create the new directory">
 		<cfargument name = "installDir" required = "true" type = "string" />
 
 			<cfdirectory action = "create" directory = "#arguments.installDir#" mode = "777" />
@@ -406,7 +410,7 @@
 	</cffunction>
 
 	<cffunction name = "downloadMura" returntype = "any" output = "false" 
-			hint = "I download the latest version of Mura">
+				hint = "I download the latest version of Mura">
 		<cfargument name = "installDir" required = "true" type = "string" />
 
 		<cfhttp
@@ -421,7 +425,7 @@
 	</cffunction>
 
 	<cffunction name = "extractMura" returntype = "any" output = "false" 
-			hint = "I extract the Mura zip">
+				hint = "I extract the Mura zip">
 		<cfargument name = "zipFile" required = "true" type = "string" />
 		<cfargument name = "installDir" required = "true" type = "string" />
 
@@ -439,7 +443,7 @@
 <!--- SOURCE FILES START --->
 
 	<cffunction name = "getBootstrap" returntype = "any" output = "false" 
-			hint = "I return the latest Bootstrap.css to include in the page">
+				hint = "I return the latest Bootstrap.css to include in the page">
 
 		<!--- Not tied in yet -- The latest version of this file can be downloaded from
 				https://github.com/twitter/bootstrap/blob/master/bootstrap.css
