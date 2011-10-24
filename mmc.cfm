@@ -14,7 +14,11 @@
 
 		HTML RENDERER - Renders each screen
 
-		LAYOUT FUNCTIONS --> Provides --->
+		LAYOUT FUNCTIONS --> Provides the sub area info
+
+		CONTENT FUNCTIONS --> Stores the content for each page
+
+		CONSOLE FUNCTIONS --> All of the functions called in the renderContent to compelte the steps to setup a new site --->
 
 
 <!--- MMC SETUP --->
@@ -363,9 +367,6 @@
 
    						 <!--- hide away pretty button <p><a class = "btn primary large"  href = "?action=main.newSite">Install new site &raquo;</a></p> --->
 
-   						 
-
-
 			          </div>
 
 
@@ -384,6 +385,14 @@
 <!--- CONTENT FUNCTIONS END --->
 
 
+<!--- CONSOLE FUNCTIONS START --->
+
+
+	<!--- *************** INSERT FUNCTIONS HERE FROM BASH SCRIPTS --->
+
+
+
+<!--- CONSOLE FUNCTIONS END --->
 
 
 
