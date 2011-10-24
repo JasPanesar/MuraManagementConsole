@@ -98,11 +98,6 @@
 
 
 
-
-
-
-
-
 <!--- LAYOUT FUNCTIONS START --->
 
 
@@ -382,10 +377,60 @@
 
 <!--- CONSOLE FUNCTIONS START --->
 
+	<cffunction name = "installMura" returntype = "any" output = "false" 
+			hint = "I download and extract the latest version of Mura to a user-specified directory">
 
-	<!--- *************** INSERT FUNCTIONS HERE FROM BASH SCRIPTS --->
+		<cfset var fullInstallPath = '' />
+		<cfset var zipFile = '' />
 
+		<cfif not isDefined( 'form.projectName' )>
+			<cflocation url = "mmc.cfm?action=main.newSite" addtoken = "false" />
+		</cfif>
 
+		<cfset fullInstallPath = expandPath( '.' ) & '/' & form.projectName />
+
+		<cfset createMuraInstallDirectory( fullInstallPath ) />
+		<cfset zipFile = downloadMura( fullInstallPath ) />
+		<cfset extractMura( zipFile, fullInstallPath ) />
+
+		<cffile action = "delete" file = "#zipFile#" />
+
+	</cffunction>
+
+	<cffunction name = "createMuraInstallDirectory" returntype = "any" output = "false" 
+			hint = "I create the new directory">
+		<cfargument name = "installDir" required = "true" type = "string" />
+
+			<cfdirectory action = "create" directory = "#arguments.installDir#" mode = "777" />
+
+	</cffunction>
+
+	<cffunction name = "downloadMura" returntype = "any" output = "false" 
+			hint = "I download the latest version of Mura">
+		<cfargument name = "installDir" required = "true" type = "string" />
+
+		<cfhttp
+			url 		= "http://www.getmura.com/index.cfm/?LinkServID=62611A40-FAD0-94F4-54E16A8FC4614BD2&showMeta=0"
+			method		= "GET"
+			path 		= "#arguments.installDir#"
+			file 		= "mura-latest.zip"
+			getAsBinary	= "yes" />
+		
+		<cfreturn installDir & '/mura-latest.zip' />
+
+	</cffunction>
+
+	<cffunction name = "extractMura" returntype = "any" output = "false" 
+			hint = "I extract the Mura zip">
+		<cfargument name = "zipFile" required = "true" type = "string" />
+		<cfargument name = "installDir" required = "true" type = "string" />
+
+		<cfzip
+			action 		= "unzip"
+			destination	= "#arguments.installDir#"
+			file 		= "#arguments.zipFile#" />
+
+	</cffunction>
 
 <!--- CONSOLE FUNCTIONS END --->
 
@@ -394,7 +439,7 @@
 <!--- SOURCE FILES START --->
 
 	<cffunction name = "getBootstrap" returntype = "any" output = "false" 
-			hint = "I return the latest Bootstrap.css to include in the page" description = "I return the latest Bootstrap.css to include in the page">
+			hint = "I return the latest Bootstrap.css to include in the page">
 
 		<!--- Not tied in yet -- The latest version of this file can be downloaded from
 				https://github.com/twitter/bootstrap/blob/master/bootstrap.css
@@ -414,61 +459,7 @@
 
 		<cfset strBootstrap = replace( #strBootstrap#, "#" , "##" , "ALL" ) /> --->
 
-
 		<cfreturn strBootstrap />
 
-
-		
 	</cffunction>
 
-	<cffunction name="installMura" returntype="any" output="false" 
-			hint="I download and extract the latest version of Mura to a user-specified directory">
-
-		<cfset var fullInstallPath = '' />
-		<cfset var zipFile = '' />
-
-		<cfif not isDefined( 'form.projectName' )>
-			<cflocation url="mmc.cfm?action=main.newSite" addtoken="false" />
-		</cfif>
-
-		<cfset fullInstallPath = expandPath( '.' ) & '/' & form.projectName />
-
-		<cfset createMuraInstallDirectory( fullInstallPath ) />
-		<cfset zipFile = downloadMura( fullInstallPath ) />
-		<cfset extractMura( zipFile, fullInstallPath ) />
-
-		<cffile action="delete" file="#zipFile#" />
-
-	</cffunction>
-
-	<cffunction name="createMuraInstallDirectory" returntype="any" output="false" hint="I create the new directory">
-		<cfargument name="installDir" required="true" type="string" />
-
-			<cfdirectory action="create" directory="#arguments.installDir#" mode="777" />
-
-	</cffunction>
-
-	<cffunction name="downloadMura" returntype="any" output="false" hint="I download the latest version of Mura">
-		<cfargument name="installDir" required="true" type="string" />
-
-		<cfhttp
-			url="http://www.getmura.com/index.cfm/?LinkServID=62611A40-FAD0-94F4-54E16A8FC4614BD2&showMeta=0"
-			method="GET"
-			path="#arguments.installDir#"
-			file="mura-latest.zip"
-			getAsBinary="yes" />
-		
-		<cfreturn installDir & '/mura-latest.zip' />
-
-	</cffunction>
-
-	<cffunction name="extractMura" returntype="any" output="false" hint="I extract the Mura zip">
-		<cfargument name="zipFile" required="true" type="string" />
-		<cfargument name="installDir" required="true" type="string" />
-
-		<cfzip
-			action="unzip"
-			destination="#arguments.installDir#"
-			file="#arguments.zipFile#" />
-
-	</cffunction>
