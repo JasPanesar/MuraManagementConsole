@@ -315,32 +315,42 @@
 		
 		<h1>Let's create a new site</h1>
 
+
+			<cfform name="frmInstallNewSite" action="?action=main.createSite">
+				
+			
+
 			        <!-- First row of columns -->
-			        <div class="row">
-			          <div class="span6">
-			            <h2>What's it called?</h2>
-			            <p>First we need to name our project.<br /><br />
-			            This means you'll just have to pick a nice name.</p>
+			        <div class = "row">
+			          <div class = "span6">
+			            <h3>What's it called?</h3>
+			            <p>First we need to name our project folder.<br />
+			            Pick a nice name. NoSpaces.</p>
+
+			            <div class = "clearfix">
+							<label for = "xlInput">Project Name:</label>
+							<div class = "input">
+								<cfinput class = "xlarge" id = "projectName" name = "projectName" size = "30" type = "text" />
+							</div>
+						</div><!-- /clearfix -->
+
+   						  <p><a class = "btn primary large"  href = "?action=main.newSite">Install new site &raquo;</a></p>
+
+
+
+
 			          </div>
 
-			          <div class="span8">
-			            <br/><br/>
-			            <h3>Project Name</h3>
-			            <p></p>
 
-			             <p><a class="btn primary large" href="?action=main.newSite">Install new site &raquo;</a></p>
 
-			           
-			         </div>
-
-			        
+	        </cfform>
 			          
 			        </div>
 
 	</cffunction>
 
 
-	<cffunction name="getMainRequirements" returntype="any" output="true" hint="I display the requirements">
+	<cffunction name = "getMainRequirements" returntype = "any" output = "true" hint = "I display the requirements">
 							Requirements will go here.  For now I've listed them on the front page
 	</cffunction>
 
