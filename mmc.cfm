@@ -350,7 +350,7 @@
 			            <p>So far Bitbucket is supported, GitHub coming.</p>
 
 			            
-			            <<cfinput name="btnSubmit" id="btnSubmit" type="submit" class = "btn primary xlarge" value="Install new site " />
+			            <cfinput name="btnSubmit" id="btnSubmit" type="submit" class = "btn primary xlarg" value="Installnew site " />
 
    						 <!--- hide away pretty button <p><a class = "btn primary large"  href = "?action=main.newSite">Install new site &raquo;</a></p> --->
 
