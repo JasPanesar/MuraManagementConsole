@@ -139,8 +139,9 @@
 
 
 			<cfcase  value = "main.newSite">
-				
 
+				#getMainNewSite()#
+				
 			</cfcase>
 
 
@@ -151,13 +152,7 @@
 			</cfcase>
 
 		</cfswitch>
-
-
-
-
-
-
-		
+	
 	</cffunction>
 
 
@@ -185,7 +180,6 @@
 
 	<!--- I GET THE FOOTER --->
 	<cffunction name="renderFooter" returntype="any" access="private" output="true" hint="I get the footer of the layout">
-
 
 			<!-- Footer
 		    ================================================== -->
@@ -220,10 +214,6 @@
       </div>
 		
 	</cffunction>
-
-
-
-
 
 <!--- LAYOUT FUNCTIONS END --->
 
@@ -318,6 +308,13 @@
 
 			          Hope you enjoy,<br />
 			          Jas</p>
+	</cffunction>
+
+
+	<cffunction name="getMainNewSite" returntype="any" output="true" hint="I display the create new site screen" >
+		
+		Let's create a new site
+
 	</cffunction>
 
 
