@@ -135,6 +135,8 @@
 			<cfcase  value = "main.createSite">
 				<!--- I create the site after main.newSite posts to me --->
 
+				<
+
 			</cfcase>
 
 
@@ -347,10 +349,12 @@
 						<h3>Where should I create the repo?</h3>
 			            <p>So far Bitbucket is supported, GitHub coming.</p>
 
+			            
+			            <<cfinput name="btnSubmit" id="btnSubmit" type="submit" class = "btn primary xlarge" value="Install new site " />
 
-   						  <p><a class = "btn primary large"  href = "?action=main.newSite">Install new site &raquo;</a></p>
+   						 <!--- hide away pretty button <p><a class = "btn primary large"  href = "?action=main.newSite">Install new site &raquo;</a></p> --->
 
-
+   						 
 
 
 			          </div>
