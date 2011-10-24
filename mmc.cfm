@@ -144,7 +144,7 @@
 
 			<cfcase  value = "main.requirements">
 
-					Requirements will go here.  For now I've listed them on the front page
+				#getMainRequirements()#
 			
 			</cfcase>
 
@@ -287,9 +287,9 @@
 	<cffunction name="getMainLicense" returntype="any" output="true" hint="I contain the license info">
 							I haven't figured out which license I want to release this under yet.  <br /><br />
 
-					Additionally Sean Walsh has contributed / is working on helping getting plugins specifically deploying remotely.  I'll have to sort his contributions out part with him.
+					Additionally Sean Walsh has contributed / is working on helping getting plugins specifically deploying remotely.  I'll have to sort his contributions out part with him.<br /><br />
 
-					But, I want to release it.  So, like many things I could leave this sitting in the dark somewhere.  But it's too cool to leave it in the dark.<br />
+					Despite this, if you're one of 4 people in the world looking at this, I want to release it. It's too cool to leave it in the dark.<br />
 
 					Here's my own license so far until I have a chance to familiarize myself with the license I'd like and pick it.<br /><br />
 					
