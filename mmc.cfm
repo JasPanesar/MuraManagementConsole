@@ -124,7 +124,9 @@
 			</cfcase>
 
 			<cfcase  value = "main.contact">
-				I am main.contact
+				
+				#getMainContact()#
+
 			</cfcase>
 
 
@@ -230,6 +232,11 @@
 
 
 <!--- CONTENT FUNCTIONS START --->
+
+
+	<cffunction name="getMainContact" returntype="any" output="true" hint="I display contact info in page">
+		Contact Jas via www.panesar.net.
+	</cffunction>
 
 	<cffunction name="getMainHome" returntype="any" hint="I get the content for main.home">
 		
