@@ -135,7 +135,11 @@
 			<cfcase  value = "main.createSite">
 				<!--- I create the site after main.newSite posts to me --->
 
-				<
+
+				<!--- FUNCTION CALLS GO HERE --->
+
+
+				#getMainCreateSite()# <!--- put this at the end of the commands to display the results --->
 
 			</cfcase>
 
@@ -242,6 +246,11 @@
 	<cffunction name="getMainContact" returntype="any" output="true" hint="I display contact info in page">
 		Contact Jas via www.panesar.net.
 	</cffunction>
+
+	<cffunction name="getMainCreateSite" returntype="any" output="true" hint="I display what happened after you try to create a page">
+			I am main.CreateSite.  There should be some values that can be outputted when this happened.
+	</cffunction>
+
 
 	<cffunction name="getMainHome" returntype="any" hint="I get the content for main.home">
 		
@@ -350,7 +359,7 @@
 			            <p>So far Bitbucket is supported, GitHub coming.</p>
 
 			            
-			            <cfinput name="btnSubmit" id="btnSubmit" type="submit" class = "btn primary xlarg" value="Installnew site " />
+			            <cfinput name="btnSubmit" id="btnSubmit" type="submit" class = "btn primary xlarg" value="Install New Site" />
 
    						 <!--- hide away pretty button <p><a class = "btn primary large"  href = "?action=main.newSite">Install new site &raquo;</a></p> --->
 
