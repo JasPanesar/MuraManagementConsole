@@ -384,3 +384,27 @@
 
 		
 	</cffunction>
+
+		<cffunction name="installMura" returntype="any" output="false" 
+			hint="I download and extract the latest version of Mura to a user-specified directory">
+
+			<cfif not isDefined( 'form.projectName' )>
+				<cflocation url="mmc.cfm?action=main.newSite" addtoken="false" />
+			</cfif>
+
+	</cffunction>
+
+	<cffunction name="createMuraInstallDirectory" returntype="any" output="false" hint="I create the new directory">
+		<cfargument name="installDir" required="true" type="string" />
+
+		<cftry>
+			<cfdirectory action="create" directory="#expandPath( '.' )#/#arguments.installDir#" mode="777" />
+
+			<cfcatch>
+				<cfreturn cfcatch.message />
+				
+			</cfcatch>
+
+		</cftry>
+
+	</cffunction>
