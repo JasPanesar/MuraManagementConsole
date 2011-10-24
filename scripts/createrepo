@@ -1,0 +1,43 @@
+#!/bin/bash
+# createrepo
+# ----------
+# create a repo on bitbucket and check it out in the current directory.
+#
+# c 2011 until I figure out a license ;)
+# feel free to learn from this and hold me accountable as much as you paid me for this.
+#
+# REQUIREMENTS:
+# - Must be run as root
+# - requires curl
+#
+# SETUP:
+# - You must chmod +x createrepo prior to running
+#
+# USAGE:
+# ./createrepo reponame    - the directory doesn't have to exist beforehand
+#
+# ROADMAP:
+# - make it optional to check it out into the current directory.
+
+# variables not used yet
+
+# debug no parameters being passed in (directory is required!)
+if [ -z "$1" ]
+then
+  echo "Usage: createrepo <directory> <username> <password>"
+  exit
+fi
+
+# first create the repo on bitbucket
+	echo "-> CREATING REPO ON BITBUCKET"
+	curl -X POST -u $2:$3 https://api.bitbucket.org/1.0/repositories/ -d name=$1 -d scm=git -d is_private=true && git clone https://$2@bitbucket.org/$2/$1.git
+
+# second check out the repo locally
+	echo "checking out repo $1 to local folder $1"
+#	git clone https://$2:$3@bitbucket.org/$2/$1.git	$1
+
+# third chmod 777 it
+        echo "-> CHMOD 777 empty dir $1/ "
+        chmod -R 777 $1
+        echo "   .. done"
+

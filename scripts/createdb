@@ -1,0 +1,56 @@
+#!/bin/bash
+#
+# setup-mysql.sh
+# ---------------
+# setup mysql
+#
+# Jas Panesar
+# c 2011 until I figure out a license ;)
+# feel free to learn from this and hold me accountable as much as you paid me for this.
+#
+# I setup a new mysql database and a user
+#
+# This file is likely using no best practices for shell scripting.
+# Feel free to improve.
+#
+# REQUIREMENTS:
+# - Must be run as root
+#
+# SETUP:
+# - You must chmod +x setup-mysql  prior to running
+#
+# USAGE:
+# ./setup-mysql <dbname> <dbuser> <dbpass>
+#
+# ROADMAP:
+#
+#
+
+# variables not used yet
+#
+# muraurl = "http://www.getmura.com/index.cfm/?LinkServID=62611A40-FAD0-94F4-54E16A8FC4614BD2&showMeta=0"
+# murafile = "mura-latest.zip"
+
+EXPECTED_ARGS=3
+E_BADARGS=65
+#MYSQL=`which mysql`
+MYSQL = '/usr/local/mysql/bin/mysql'
+
+Q1="CREATE DATABASE IF NOT EXISTS $1;"
+Q2="GRANT ALL ON *.* TO '$2'@'localhost' IDENTIFIED BY '$3';"
+Q3="FLUSH PRIVILEGES;"
+SQL="${Q1}${Q2}${Q3}"
+
+if [ $# -ne $EXPECTED_ARGS ]
+then
+  echo "Usage: $0 dbname dbuser dbpass"
+  exit $E_BADARGS
+fi
+
+#$MYSQL -uroot -p -e "$SQL"
+# path needs to be set manually in this file because I haven't figured out bash scripting syntax that works yet.
+/usr/local/mysql/bin/mysql -uroot -p -e "$SQL"
+
+
+
+
