@@ -25,7 +25,7 @@
 	<cfset mmcVersion = "0.01">
 
 	<!--- Set up a default view --->
-	<cfparam name="url.action" default="main.home" />
+	<cfparam name = "url.action" default = "main.home" />
 
 
 <!--- HTML RENDERER START --->
@@ -33,9 +33,9 @@
 
 
 	<!DOCTYPE html>
-	<html lang="en">
+	<html lang = "en">
 	  <head>
-	    <meta charset="utf-8">
+	    <meta charset = "utf-8">
 
      	<title>Mura Management Console - Jas Panesar</title>		
 
@@ -47,15 +47,13 @@
 	   		<cfoutput>#getBootstrap()#</cfoutput>
 	   	</script> --->
 
-	   	<link rel="stylesheet" href="http://twitter.github.com/bootstrap/1.3.0/bootstrap.min.css">
-		<style type="text/css">
+	   	<link rel = "stylesheet" href = "http://twitter.github.com/bootstrap/1.3.0/bootstrap.min.css">
+		<style type = "text/css">
 		 body {
 			padding-top: 60px;
 		 }
 		</style>
 		<!--- STYLING END --->
-
-
 	  </head>
 
 	  <cfoutput>
@@ -66,12 +64,12 @@
 
 	 	<!--- MAIN CONTAINER START --->
 
-			 <div class="container-fluid">
+			 <div class = "container-fluid">
 
 			 	<!--- render the sidebar --->
 			 	#renderLayoutSidebar()#
 
-			      <div class="content">
+			      <div class = "content">
 
 			      	#renderContent(action=url.action)#
 
@@ -103,9 +101,11 @@
 
 	<!--- I GET THE CONTENT FOR THE CURRENT ACTION --->
 
-	<cffunction name="renderContent" returntype="any" output="true" displayname="getContent" hint="I get the content for any page" description="I am the mega switch between all the page that finds all the content and commands and does it all.">
+	<cffunction name = "renderContent" returntype = "any" output = "true" displayname = "getContent" 
+				hint = "I get the content for any page" description = "I am the mega switch between all the page that finds all the content and commands and does it all.">
 
-		<cfargument name="action" type="string" required="true" displayname="the action that we're rendering" hint="" />
+		<cfargument name = "action" type = "string" required = "true" 
+					hint = "the action that we're rendering" />
 
 
 		<!--- HAMMER TIME --->
@@ -167,21 +167,22 @@
 
 
 	<!--- I GET THE TOP BAR --->
-	<cffunction name="renderHeader" returntype="any" access="private" output="true" hint="I get the header of the layout">
+	<cffunction name = "renderHeader" returntype = "any" access = "private" output = "true" 
+				hint = "I get the header of the layout">
 
 
 			<!-- Topbar
 		    ================================================== -->
-		    <div class="topbar">
-		      <div class="topbar-inner">
-		        <div class="container-fluid">
-		          <a class="brand" href="?action=main.home">Mura Management Console</a>
-		          <ul class="nav">
-		            <li class="active"><a href="?action=main.home">Home</a></li>
-		            <li><a href="?action=main.newSite">Install New Site</a></li>
-		            <li><a href="?action=main.contact">Contact</a></li>
+		    <div class = "topbar">
+		      <div class = "topbar-inner">
+		        <div class = "container-fluid">
+		          <a class = "brand" href = "?action=main.home">Mura Management Console</a>
+		          <ul class = "nav">
+		            <li class = "active"><a href = "?action=main.home">Home</a></li>
+		            <li><a href = "?action=main.newSite">Install New Site</a></li>
+		            <li><a href = "?action=main.contact">Contact</a></li>
 		          </ul>
-		          <p class="pull-right">Version #mmcVersion#</p>
+		          <p class = "pull-right">Version #mmcVersion#</p>
 		        </div>
 		      </div>
 			    </div>
@@ -189,7 +190,8 @@
 	</cffunction>
 
 	<!--- I GET THE FOOTER --->
-	<cffunction name="renderFooter" returntype="any" access="private" output="true" hint="I get the footer of the layout">
+	<cffunction name = "renderFooter" returntype = "any" access = "private" output = "true" 
+				hint = "I get the footer of the layout">
 
 			<!-- Footer
 		    ================================================== -->
@@ -201,11 +203,11 @@
 
 
 	<!--- I GET THE SIDE BAR CONTENT THAT GOES IN THE LAYOUT --->
-	<cffunction name="renderLayoutSidebar" returntype="any" access="private" output="true" displayname="getLayoutSideBar" 
-				hint="I return the sidebar layout" description="I render the sidebar layout links">
+	<cffunction name = "renderLayoutSidebar" returntype = "any" access = "private" output = "true" displayname = "getLayoutSideBar" 
+				hint = "I return the sidebar layout" >
 
-	  <div class="sidebar">
-        <div class="well">
+	  <div class = "sidebar">
+        <div class = "well">
           <h5>My Mura Console</h5>
           <ul>
             <!---<li><a href = "##" >Link</a></li>
@@ -381,6 +383,59 @@
 
 <!--- CONSOLE FUNCTIONS START --->
 
+
+	<!--- CREATE BITBUCKET REPO FUNCTIONS START --->
+	<cffunction name = "createRepo"  returntype = "any"  output = "false"
+				hint = "I create a repo in bitbucket">
+
+				<cfargument 	name = "folderName" 	type = "string" 	required = "true" 
+								hint = "What the repo should be called and the folder that it'll be checked out locally into" />		
+
+				<cfargument 	name = "repoUsername" 	type = "string" 	required = "true" 
+								hint = "Login name for Bitbucket" />
+
+				<cfargument 	name = "repoPassword" 	type = "string" 	required = "true" 
+								hint = "Password for Bitbucket" />
+
+				<cfargument 	name = "checkOutRepo" 	type = "boolean" 	required = "true" 	default = "true" 
+								hint = "Should we do a git clone locally?" />
+
+
+				<!---  my createrepo bash script logic to reproduce
+
+
+					# debug no parameters being passed in (directory is required!)
+					if [ -z "$1" ]
+					then
+					  echo "Usage: createrepo <directory> <username> <password>"
+					  exit
+					fi
+
+					# first create the repo on bitbucket
+						echo "-> CREATING REPO ON BITBUCKET"
+						curl -X POST -u $2:$3 https://api.bitbucket.org/1.0/repositories/ -d name=$1 -d scm=git -d is_private=true && git clone https://$2@bitbucket.org/$2/$1.git
+
+					# second check out the repo locally
+						echo "checking out repo $1 to local folder $1"
+					#	git clone https://$2:$3@bitbucket.org/$2/$1.git	$1
+
+					# third chmod 777 it
+					        echo "-> CHMOD 777 empty dir $1/ "
+					        chmod -R 777 $1
+					        echo "   .. done"
+
+
+				--->
+
+
+
+	</cffunction>
+
+	<!--- CREATE BITBUCKET REPO FUNCTIONS END --->
+
+
+	<!--- INSTALL MURA FUNCTIONS START --->
+
 	<cffunction name = "installMura" returntype = "any" output = "false" 
 				hint = "I download and extract the latest version of Mura to a user-specified directory">
 
@@ -434,7 +489,11 @@
 			destination	= "#arguments.installDir#"
 			file 		= "#arguments.zipFile#" />
 
+		<!--- TODO: need to delete the .zip file after extracting complete --->
+
 	</cffunction>
+
+	<!--- INSTALL MURA FUNCTIONS END --->
 
 <!--- CONSOLE FUNCTIONS END --->
 
