@@ -434,6 +434,57 @@
 	<!--- CREATE BITBUCKET REPO FUNCTIONS END --->
 
 
+	<!--- CREATE DATABASE FUNCTIONS START --->
+
+	<cffunction name = "createDB" 	returntype = "any" 	output = "true" 
+				hint = "I create a mySQL db" >
+		
+				<cfargument name = "dbName" 	type = "string" 	required = "true" 
+							hint = "Name of database to create" />
+
+				<cfargument name = "dbusername" type = "string" 	required = "true" 
+							hint = "username to create in DB" />
+				
+				<cfargument name = "dbpassword" type = "string" 	required = "true" 
+							hint = "password to create in DB" />					
+		
+
+
+		<!--- my proof of concept bash script to convert 
+
+		EXPECTED_ARGS=3
+		E_BADARGS=65
+		#MYSQL=`which mysql`
+		MYSQL = '/usr/local/mysql/bin/mysql'
+
+		Q1="CREATE DATABASE IF NOT EXISTS $1;"
+		Q2="GRANT ALL ON *.* TO '$2'@'localhost' IDENTIFIED BY '$3';"
+		Q3="FLUSH PRIVILEGES;"
+		SQL="${Q1}${Q2}${Q3}"
+
+		if [ $# -ne $EXPECTED_ARGS ]
+		then
+		  echo "Usage: $0 dbname dbuser dbpass"
+		  exit $E_BADARGS
+		fi
+
+		#$MYSQL -uroot -p -e "$SQL"
+		# path needs to be set manually in this file because I haven't figured out bash scripting syntax that works yet.
+		/usr/local/mysql/bin/mysql -uroot -p -e "$SQL"
+
+
+		--->
+
+	</cffunction>
+
+
+
+
+	<!--- CREATE DATABASE FUNCTIONS END --->
+
+
+
+
 	<!--- INSTALL MURA FUNCTIONS START --->
 
 	<cffunction name = "installMura" returntype = "any" output = "false" 
