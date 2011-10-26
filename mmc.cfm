@@ -509,6 +509,9 @@
 
 	<cffunction name = "createMuraInstallDirectory" returntype = "any" output = "false" 
 				hint = "I create the new directory">
+
+		<!--- this may be deprecated or not be as neccesary if we tie in repo creation or sit as a general create directory function --->
+
 		<cfargument name = "installDir" required = "true" type = "string" />
 
 			<cfdirectory action = "create" directory = "#arguments.installDir#" mode = "777" />
