@@ -355,7 +355,7 @@
 						</div><!-- /clearfix -->
 
 						<h3>Where should I create the repo?</h3>
-			            <p>So far Bitbucket is supported, GitHub coming.</p>
+						<p>So far Bitbucket is supported, GitHub coming.</p>
 			            <p>You will need to enter the full path to your Git executable in order to check out the repository. To locate it, either enter "which git"(Linux) or "where git"(Windows) at the terminal or command line.</p>
 
 			            <div class = "clearfix">
@@ -364,13 +364,13 @@
 			            		<ul class = "inputs-list">
 			            			<li>
 			            				<label>
-				            				<cfinput id = "bitbucket" name = "dcvs" value = "bitbucket" type = "radio" checked = "true" />
+				            				<cfinput id = "bitbucket" name = "dcvs" value = "bitbucket" type = "radio" />
 						            		<span>Bitbucket</span>
 					            		</label>
 					            	</li>
 					            	<li>	
 					            		<label>
-				            				<cfinput id = "github" name = "dcvs" value = "github" type = "radio" disabled = "true" />
+				            				<cfinput id = "github" name = "dcvs" value = "github" type = "radio" />
 						            		<span>GitHub</span>
 					            		</label>
 					            	</li>
@@ -425,7 +425,7 @@
 
 	<!--- CREATE BITBUCKET REPO FUNCTIONS START --->
 	<cffunction name = "createRepo"  returntype = "any"  output = "false"
-				hint = "I create a repo in bitbucket">
+				hint = "I create a repo in bitbucket or github">
 
 				<cfargument 	name = "folderName" 	type = "string" 	required = "true" 
 								hint = "What the repo should be called and the folder that it'll be checked out locally into" />		
@@ -433,55 +433,99 @@
 								hint = "The full path to the project folder so that we can check it out" />
 				
 				<cfargument 	name = "repoUsername" 	type = "string" 	required = "true" 
-								hint = "Login name for Bitbucket" />
+								hint = "Login name for DVCS" />
 
 				<cfargument 	name = "repoPassword" 	type = "string" 	required = "true" 
-								hint = "Password for Bitbucket" />
+								hint = "Password for DVCS" />
 
 				<cfargument 	name = "checkOutRepo" 	type = "boolean" 	required = "true" 	default = "true" 
 								hint = "Should we do a git clone locally?" />
 
+				<cfargument 	name = "dcvsType"		type = "string"		required = "true"
+								hint = "Bitbucket or GitHub?" />
+
 				<cfargument 	name = "gitPath"		type = "string"		required = "true"
 								hint = "The path to Git so that we can clone this bad boy" />
 
-				<cfhttp
-					url = "https://api.bitbucket.org/1.0/repositories/"
-					method = "POST"
-					username = "#arguments.repoUsername#"
-					password = "#arguments.repoPassword#"
-					throwOnError = "yes">
-					<cfhttpparam
-						name = "name"
-						value = "#arguments.folderName#"
-						type = "formField"
-						encoded = "no"  />
-					<cfhttpparam
-						name = "scm"
-						value = "git"
-						type = "formField"
-						encoded = "no"  />
-					<cfhttpparam
-						name = "is_private"
-						value = "true"
-						type = "formField"
-						encoded = "no" />
-				</cfhttp>
+				<!--- This should break out into separate functions... --->
+				<cfif arguments.dcvsType EQ 'bitbucket'>
+					<cfhttp
+						url = "https://api.bitbucket.org/1.0/repositories/"
+						method = "POST"
+						username = "#arguments.repoUsername#"
+						password = "#arguments.repoPassword#"
+						throwOnError = "yes">
+						<cfhttpparam
+							name = "name"
+							value = "#arguments.folderName#"
+							type = "formField"
+							encoded = "no"  />
+						<cfhttpparam
+							name = "scm"
+							value = "git"
+							type = "formField"
+							encoded = "no"  />
+						<cfhttpparam
+							name = "is_private"
+							value = "true"
+							type = "formField"
+							encoded = "no" />
+					</cfhttp>
 
-				<cfif arguments.checkOutRepo>
-					<!--- Shorten the arguments string a little.. --->
-					<cfset user = arguments.repoUsername />
-					<cfset pass = arguments.repoPassword / >
-					<!--- Has to be lowercase or Git won't check it out successfully --->
-					<cfset project = lcase( arguments.folderName ) />
-					<cfset directory = arguments.installPath />
-					<cfexecute
-						name = "#arguments.gitPath#"
-						arguments = "clone https://#user#:#pass#@bitbucket.org/#user#/#project#.git #directory#"
-						timeout = "60" />
-						<!--- Timeout may need tweaking, but it HAS to be set to long enough to allow the command 
-						to execute. If not, the install process will continue before the directory has been created 
-						and it's game over man, game over. --->
+					<cfif arguments.checkOutRepo>
+						<!--- Shorten the arguments string a little.. --->
+						<cfset user = arguments.repoUsername />
+						<cfset pass = arguments.repoPassword / >
+						<!--- Has to be lowercase or Git won't check it out successfully --->
+						<cfset project = lcase( arguments.folderName ) />
+						<cfset directory = arguments.installPath />
+						<cfexecute
+							name = "#arguments.gitPath#"
+							arguments = "clone https://#user#:#pass#@bitbucket.org/#user#/#project#.git #directory#"
+							timeout = "60" />
+							<!--- Timeout may need tweaking, but it HAS to be set to long enough to allow the command 
+							to execute. If not, the install process will continue before the directory has been created 
+							and it's game over man, game over. --->
+					</cfif>
 				</cfif>
+				<!--- This isn't working right now...GitHub makes you init the repo locally and then push to it. --->
+				<cfif arguments.dcvsType EQ 'github'>
+					<cfset githubArgs = {} />
+					<cfset githubArgs['name'] = "#arguments.folderName#" />
+					<cfset githubArgs = serializeJSON( githubArgs ) />
+
+					<cfhttp
+						url = "https://api.github.com/user/repos"
+						method = "post"
+						username = "#arguments.repoUsername#"
+						password = "#arguments.repoPassword#"
+						throwOnError = "yes">
+						<cfhttpparam
+							name = "Content-Type"
+							value = "application/json"
+							type = "header" />
+						<cfhttpparam
+							value = "#githubArgs#"
+							type = "body" />
+					</cfhttp>
+
+					<cfif arguments.checkOutRepo>
+						<!--- Shorten the arguments string a little.. --->
+						<cfset user = arguments.repoUsername />
+						<cfset pass = arguments.repoPassword / >
+						<!--- Has to be lowercase or Git won't check it out successfully --->
+						<cfset project = lcase( arguments.folderName ) />
+						<cfset directory = arguments.installPath />
+						<cfexecute
+							name = "#arguments.gitPath#"
+							arguments = "clone https://#user#:#pass#@github.com/#user#/#project#.git #directory#"
+							timeout = "60" />
+							<!--- Timeout may need tweaking, but it HAS to be set to long enough to allow the command 
+							to execute. If not, the install process will continue before the directory has been created 
+							and it's game over man, game over. --->
+					</cfif>
+				</cfif>
+
 
 	</cffunction>
 
@@ -553,7 +597,7 @@
 
 		<cfset fullInstallPath = expandPath( '.' ) & '/' & form.projectName />
 
-		<cfset createRepo( form.projectName, fullInstallPath, form.username, form.password, true, form.gitPath ) />
+		<cfset createRepo( form.projectName, fullInstallPath, form.username, form.password, true, form.dcvs, form.gitPath ) />
 		<cfset zipFile = downloadMura( fullInstallPath ) />
 		<cfset extractMura( zipFile, fullInstallPath ) />
 
