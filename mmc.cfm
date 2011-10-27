@@ -364,7 +364,7 @@
 			            		<ul class = "inputs-list">
 			            			<li>
 			            				<label>
-				            				<cfinput id = "bitbucket" name = "dcvs" value = "bitbucket" type = "radio" />
+				            				<cfinput id = "bitbucket" name = "dcvs" value = "bitbucket" type = "radio" checked = "yes" />
 						            		<span>Bitbucket</span>
 					            		</label>
 					            	</li>
@@ -380,7 +380,7 @@
 			            <div class = "clearfix">
 				            <label for = "gitPath">Full Path to Git:</label>
 				            <div class = "input">
-				            	<cfinput class = "xlarge" id = "gitPath" name = "gitPath" size = "30" type = "text" />
+				            	<cfinput class = "xlarge" id = "gitPath" name = "gitPath" size = "30" type = "text"  default = "git" />
 			            	</div>
 			            </div>
 			            <div class = "clearfix">
