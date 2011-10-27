@@ -348,7 +348,7 @@
 			            Pick a nice name. NoSpaces.</p>
 
 			            <div class = "clearfix">
-							<label for = "xlInput">Project Name:</label>
+							<label for = "projectName">Project Name:</label>
 							<div class = "input">
 								<cfinput class = "xlarge" id = "projectName" name = "projectName" size = "30" type = "text" />
 							</div>
@@ -356,6 +356,45 @@
 
 						<h3>Where should I create the repo?</h3>
 			            <p>So far Bitbucket is supported, GitHub coming.</p>
+			            <p>You will need to enter the full path to your Git executable in order to check out the repository. To locate it, either enter "which git"(Linux) or "where git"(Windows) at the terminal or command line.</p>
+
+			            <div class = "clearfix">
+			            	<label>Repository Location?</label>
+			            	<div class = "input">
+			            		<ul class = "inputs-list">
+			            			<li>
+			            				<label>
+				            				<cfinput id = "bitbucket" name = "dcvs" value = "bitbucket" type = "radio" checked = "true" />
+						            		<span>Bitbucket</span>
+					            		</label>
+					            	</li>
+					            	<li>	
+					            		<label>
+				            				<cfinput id = "github" name = "dcvs" value = "github" type = "radio" disabled = "true" />
+						            		<span>GitHub</span>
+					            		</label>
+					            	</li>
+					            </ul>
+			            	</div>
+			            </div>
+			            <div class = "clearfix">
+				            <label for = "gitPath">Full Path to Git:</label>
+				            <div class = "input">
+				            	<cfinput class = "xlarge" id = "gitPath" name = "gitPath" size = "30" type = "text" />
+			            	</div>
+			            </div>
+			            <div class = "clearfix">
+			            	<label for = "userName">Username:</label>
+			            	<div class = "input">
+			            		<cfinput class = "xlarge" id = "userName" name = "userName" size = "30" type = "text" />
+			            	</div>
+			            </div>
+			            <div class = "clearfix">
+			            	<label for = "password">Password:</label>
+			            	<div class = "input">
+			            		<cfinput class = "xlarge" id = "password" name = "password" size = "30" type = "password" />
+			            	</div>
+			            </div>
 
 			            
 			            <cfinput name = "btnSubmit" id = "btnSubmit" type = "submit" class = "btn primary xlarg" value = "Install New Site" />
@@ -390,7 +429,9 @@
 
 				<cfargument 	name = "folderName" 	type = "string" 	required = "true" 
 								hint = "What the repo should be called and the folder that it'll be checked out locally into" />		
-
+				<cfargument 	name = "installPath"	type = "string"		required = "true"
+								hint = "The full path to the project folder so that we can check it out" />
+				
 				<cfargument 	name = "repoUsername" 	type = "string" 	required = "true" 
 								hint = "Login name for Bitbucket" />
 
@@ -400,34 +441,47 @@
 				<cfargument 	name = "checkOutRepo" 	type = "boolean" 	required = "true" 	default = "true" 
 								hint = "Should we do a git clone locally?" />
 
+				<cfargument 	name = "gitPath"		type = "string"		required = "true"
+								hint = "The path to Git so that we can clone this bad boy" />
 
-				<!---  my createrepo bash script logic to reproduce
+				<cfhttp
+					url = "https://api.bitbucket.org/1.0/repositories/"
+					method = "POST"
+					username = "#arguments.repoUsername#"
+					password = "#arguments.repoPassword#"
+					throwOnError = "yes">
+					<cfhttpparam
+						name = "name"
+						value = "#arguments.folderName#"
+						type = "formField"
+						encoded = "no"  />
+					<cfhttpparam
+						name = "scm"
+						value = "git"
+						type = "formField"
+						encoded = "no"  />
+					<cfhttpparam
+						name = "is_private"
+						value = "true"
+						type = "formField"
+						encoded = "no" />
+				</cfhttp>
 
-
-					# debug no parameters being passed in (directory is required!)
-					if [ -z "$1" ]
-					then
-					  echo "Usage: createrepo <directory> <username> <password>"
-					  exit
-					fi
-
-					# first create the repo on bitbucket
-						echo "-> CREATING REPO ON BITBUCKET"
-						curl -X POST -u $2:$3 https://api.bitbucket.org/1.0/repositories/ -d name=$1 -d scm=git -d is_private=true && git clone https://$2@bitbucket.org/$2/$1.git
-
-					# second check out the repo locally
-						echo "checking out repo $1 to local folder $1"
-					#	git clone https://$2:$3@bitbucket.org/$2/$1.git	$1
-
-					# third chmod 777 it
-					        echo "-> CHMOD 777 empty dir $1/ "
-					        chmod -R 777 $1
-					        echo "   .. done"
-
-
-				--->
-
-
+				<cfif arguments.checkOutRepo>
+					<!--- Shorten the arguments string a little.. --->
+					<cfset user = arguments.repoUsername />
+					<cfset pass = arguments.repoPassword / >
+					<!--- Has to be lowercase or Git won't check it out successfully --->
+					<cfset project = lcase( arguments.folderName ) />
+					<cfset directory = arguments.installPath />
+					<cfexecute
+						name = "#arguments.gitPath#"
+						arguments = "clone https://#user#:#pass#@bitbucket.org/#user#/#project#.git #directory#"
+						timeout = "60" />
+						<!--- Timeout may need tweaking, but it HAS to be set to long enough to allow the command 
+						to execute. If not, the install process will continue before the directory has been created 
+						and it's game over man, game over. --->
+				</cfif>
 
 	</cffunction>
 
@@ -499,22 +553,11 @@
 
 		<cfset fullInstallPath = expandPath( '.' ) & '/' & form.projectName />
 
-		<cfset createMuraInstallDirectory( fullInstallPath ) />
+		<cfset createRepo( form.projectName, fullInstallPath, form.username, form.password, true, form.gitPath ) />
 		<cfset zipFile = downloadMura( fullInstallPath ) />
 		<cfset extractMura( zipFile, fullInstallPath ) />
 
 		<cffile action = "delete" file = "#zipFile#" />
-
-	</cffunction>
-
-	<cffunction name = "createMuraInstallDirectory" returntype = "any" output = "false" 
-				hint = "I create the new directory">
-
-		<!--- this may be deprecated or not be as neccesary if we tie in repo creation or sit as a general create directory function --->
-
-		<cfargument name = "installDir" required = "true" type = "string" />
-
-			<cfdirectory action = "create" directory = "#arguments.installDir#" mode = "777" />
 
 	</cffunction>
 
