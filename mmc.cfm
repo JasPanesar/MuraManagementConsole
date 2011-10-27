@@ -575,6 +575,21 @@
 
 	</cffunction>
 
+	<cffunction name = "createDSN" 	returntype = "any" 	output = "true" 
+				hint = "I create a ColdFusion DSN" >
+		
+				<cfargument name = "dsnName" 	type = "string" 		required = "true" 
+							hint = "Name of dsn to create" />
+
+				<cfargument name = "adminUsername" 	type = "string" 	required = "true"	default = "admin" 
+							hint = "The admin user name you log into CF Admin with, default is admin" />	
+							
+				<cfargument name = "adminPassword" 	type = "string" 	required = "true" 
+							hint = "Cf administrator password" />													
+
+				<!--- logic to create admin DSN goes here --->
+
+	</cffunction>
 
 
 
