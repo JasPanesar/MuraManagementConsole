@@ -444,9 +444,6 @@
 				<cfargument 	name = "dcvsType"		type = "string"		required = "true"
 								hint = "Bitbucket or GitHub?" />
 
-				<cfargument 	name = "gitPath"		type = "string"		required = "true"
-								hint = "The path to Git so that we can clone this bad boy" />
-
 				<!--- This should break out into separate functions... --->
 				<cfif arguments.dcvsType EQ 'bitbucket'>
 					<cfhttp
@@ -471,23 +468,8 @@
 							type = "formField"
 							encoded = "no" />
 					</cfhttp>
-
-					<cfif arguments.checkOutRepo>
-						<!--- Shorten the arguments string a little.. --->
-						<cfset user = arguments.repoUsername />
-						<cfset pass = arguments.repoPassword / >
-						<!--- Has to be lowercase or Git won't check it out successfully --->
-						<cfset project = lcase( arguments.folderName ) />
-						<cfset directory = arguments.installPath />
-						<cfexecute
-							name = "#arguments.gitPath#"
-							arguments = "clone https://#user#:#pass#@bitbucket.org/#user#/#project#.git #directory#"
-							timeout = "60" />
-							<!--- Timeout may need tweaking, but it HAS to be set to long enough to allow the command 
-							to execute. If not, the install process will continue before the directory has been created 
-							and it's game over man, game over. --->
-					</cfif>
 				</cfif>
+
 				<!--- This isn't working right now...GitHub makes you init the repo locally and then push to it. --->
 				<cfif arguments.dcvsType EQ 'github'>
 					<cfset githubArgs = {} />
@@ -508,22 +490,16 @@
 							value = "#githubArgs#"
 							type = "body" />
 					</cfhttp>
+				</cfif>
 
-					<cfif arguments.checkOutRepo>
+				<cfif arguments.checkOutRepo>
 						<!--- Shorten the arguments string a little.. --->
 						<cfset user = arguments.repoUsername />
 						<cfset pass = arguments.repoPassword / >
 						<!--- Has to be lowercase or Git won't check it out successfully --->
 						<cfset project = lcase( arguments.folderName ) />
 						<cfset directory = arguments.installPath />
-						<cfexecute
-							name = "#arguments.gitPath#"
-							arguments = "clone https://#user#:#pass#@github.com/#user#/#project#.git #directory#"
-							timeout = "60" />
-							<!--- Timeout may need tweaking, but it HAS to be set to long enough to allow the command 
-							to execute. If not, the install process will continue before the directory has been created 
-							and it's game over man, game over. --->
-					</cfif>
+						<cfset cloneRepository( user, pass, project, directory, arguments.dcvsType ) />
 				</cfif>
 
 
@@ -612,7 +588,7 @@
 
 		<cfset fullInstallPath = expandPath( '.' ) & '/' & form.projectName />
 
-		<cfset createRepo( form.projectName, fullInstallPath, form.username, form.password, true, form.dcvs, form.gitPath ) />
+		<cfset createRepo( form.projectName, fullInstallPath, form.username, form.password, true, form.dcvs ) />
 		<cfset zipFile = downloadMura( fullInstallPath ) />
 		<cfset extractMura( zipFile, fullInstallPath ) />
 
@@ -650,6 +626,51 @@
 	</cffunction>
 
 	<!--- INSTALL MURA FUNCTIONS END --->
+
+	<cffunction name = "cloneRepository" returntype = "any" output = "false"
+				hint = "Clones the git repository">
+		<cfargument name = "user" 		type = "string" required = "true" />
+		<cfargument name = "pass" 		type = "string" required = "true" />
+		<cfargument name = "project"  	type = "string" required = "true" />
+		<cfargument name = "directory"  type = "string" required = "true" />
+		<cfargument name = "dcvs"		type = "string"	required = "true" />
+
+		<cfset var runtime = createObject( 'java', 'java.lang.Runtime' ).getRuntime() />
+		<cfset var userOS = getOS() />
+		<cfset var command = '' />
+		<cfset var process = '' />
+		<cfset var args = '' />
+
+		<cfif arguments.dcvs EQ 'bitbucket'>
+			<cfset args = 'clone https://#arguments.user#:#arguments.pass#@bitbucket.org/#arguments.user#/#arguments.project#.git #arguments.directory#' />
+		<cfelseif arguments.dcvs EQ 'github'>
+			<cfset args = 'clone https://#arguments.user#:#arguments.pass#@github.com/#arguments.user#/#arguments.project#.git #arguments.directory#' />
+		</cfif>
+
+		<cfif reFindNoCase( 'Windows', userOS )>
+			<cfset command = 'git.cmd ' & args />
+		<cfelse>
+			<cfset command = 'git ' & args />
+		</cfif>
+
+		<cftry>
+			<cfset process = runtime.exec( command ) />
+
+			<cfcatch type="java.io.IOException">
+				<cfreturn cfcatch.message />
+			</cfcatch>
+		</cftry>
+
+	</cffunction>
+
+	<cffunction name = "getOS" returntype = "string" output = "false"
+					hint = "I return the name of the user's operating system">
+
+			<cfset var sys = createObject( 'java', 'java.lang.System' ) />
+
+			<cfreturn sys.getProperty( 'os.name' ) />
+
+	</cffunction>
 
 <!--- CONSOLE FUNCTIONS END --->
 
