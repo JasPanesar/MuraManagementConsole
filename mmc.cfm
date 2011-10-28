@@ -149,6 +149,8 @@
 			<cfcase  value = "main.newSite">
 				<!--- I show the form to create a new site --->
 
+				<!---<cfset gitPath = getGitLocation( cgi.HTTP_USER_AGENT ) />--->
+
 				#getMainNewSite()#
 				
 			</cfcase>
@@ -338,7 +340,18 @@
 
 			<cfform name = "frmInstallNewSite" action = "?action=main.createSite">
 				
-			
+			<!---	<cfoutput>#cgi.HTTP_USER_AGENT#<br/>
+				[#gitPath#]<br/>
+
+
+		[[<cfexecute 
+			name = "which"
+			arguments = "-a git"
+			timeout = "30" />]]
+
+
+
+				</cfoutput>--->
 
 			        <!-- First row of columns -->
 			        <div class = "row">
@@ -380,7 +393,7 @@
 			            <div class = "clearfix">
 				            <label for = "gitPath">Full Path to Git:</label>
 				            <div class = "input">
-				            	<cfinput class = "xlarge" id = "gitPath" name = "gitPath" size = "30" type = "text"  default = "git" />
+				            	<cfinput class = "xlarge" id = "gitPath" name = "gitPath" size = "30" type = "text"  value = "git" />
 			            	</div>
 			            </div>
 			            <div class = "clearfix">
@@ -504,6 +517,36 @@
 
 
 	</cffunction>
+
+	<cffunction name = "getGitLocation"  returntype = "any"  output = "false"
+				hint = "I return the location of git locally">
+
+				<cfargument 	name = "userAgent" 	type = "string" 	required = "true"  default = "#cgi.HTTP_USER_AGENT#"
+								hint = "The User agent" />		
+
+		<cfif 		findNoCase( "Windows" , arguments.userAgent ) GT 0>
+			<cfset gitSearchCommand = "where" />
+		<cfelseif 	findNoCase( "Macintosh" , arguments.userAgent ) GT 0>
+			<cfset gitSearchCommand = "which" />
+		<cfelseif 	findNoCase( "Linux", arguments.userAgent ) GT 0>
+			<cfset gitSearchCommand = "which" />
+		</cfif>
+	
+		<cfexecute 
+			name = "#gitSearchCommand#"
+			arguments = "git"
+			variable = "returnedGitPath"
+			timeout = "30" />
+
+		<cfif len( returnedGitPath ) LT 1>
+			<cfset returnedGitPath = "blank returned!" />
+		</cfif>
+
+		<cfreturn returnedGitPath />
+		
+	</cffunction>
+
+
 
 	<!--- CREATE BITBUCKET REPO FUNCTIONS END --->
 
