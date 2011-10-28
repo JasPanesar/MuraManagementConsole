@@ -583,8 +583,6 @@
 		<cfset zipFile = downloadMura( fullInstallPath ) />
 		<cfset extractMura( zipFile, fullInstallPath ) />
 
-		<cffile action = "delete" file = "#zipFile#" />
-
 	</cffunction>
 
 	<cffunction name = "downloadMura" returntype = "any" output = "false" 
@@ -607,12 +605,10 @@
 		<cfargument name = "zipFile" required = "true" type = "string" />
 		<cfargument name = "installDir" required = "true" type = "string" />
 
-		<cfzip
-			action 		= "unzip"
-			destination	= "#arguments.installDir#"
-			file 		= "#arguments.zipFile#" />
-
-		<!--- TODO: need to delete the .zip file after extracting complete --->
+		<!--- Trailing slash required for unzipping --->
+		<cfset destination = arguments.installDir & '/' />
+		<cfset unzip( arguments.zipFile, destination ) />
+		<cffile action = "delete" file = "#zipFile#" />
 
 	</cffunction>
 
@@ -626,9 +622,6 @@
 		<cfargument name = "directory"  type = "string" required = "true" />
 		<cfargument name = "dcvs"		type = "string"	required = "true" />
 
-		<cfset var runtime = createObject( 'java', 'java.lang.Runtime' ).getRuntime() />
-		<cfset var command = getGitName() />
-		<cfset var process = '' />
 		<cfset var args = '' />
 
 		<cfif arguments.dcvs EQ 'bitbucket'>
@@ -637,10 +630,22 @@
 			<cfset args = 'clone https://#arguments.user#:#arguments.pass#@github.com/#arguments.user#/#arguments.project#.git #arguments.directory#' />
 		</cfif>
 
-		<cftry>
-			<cfset process = runtime.exec( command & ' ' & args ).waitFor() />
+		<cfset execGit( args ) />
 
-			<cfcatch type="java.io.IOException">
+	</cffunction>
+
+	<cffunction name = "execGit" returntype = "any" output = "false"
+				hint = "General purpose git execution via Java exec()">
+		<cfargument name = "args" type = "string" hint = "Args to pass to git" />
+
+		<cfset var runtime = createObject( 'java', 'java.lang.Runtime' ).getRuntime() />
+		<cfset var command = getGitName() />
+		<cfset var process = '' />
+
+		<cftry>
+			<cfset process = runtime.exec( command & ' ' & args).waitFor() />
+
+			<cfcatch type = "java.io.IOException">
 				<cfreturn cfcatch.message />
 			</cfcatch>
 		</cftry>
@@ -651,13 +656,13 @@
 					hint = "I return the name we should use to call git">
 
 		<cfset var name = '' />
-		<cfset var userAgent = cgi.HTTP_USER_AGENT />
+		<cfset var userOS = getOS() />
 
-		<cfif findNoCase( "Windows" , userAgent ) GT 0>
+		<cfif userOS EQ 'Windows'>
 			<cfset name = "git.cmd" />
-		<cfelseif 	findNoCase( "Macintosh" , userAgent ) GT 0>
+		<cfelseif userOS EQ 'Macintosh'>
 			<cfset name = "git" />
-		<cfelseif 	findNoCase( "Linux", userAgent ) GT 0>
+		<cfelseif userOS EQ 'Linux'>
 			<cfset name = "git" />
 		</cfif>
 
@@ -665,7 +670,88 @@
 
 	</cffunction>
 
+	<cffunction name = "getOS" returntype = "string" output = "false"
+				hint = "I return the user's operating system">
+
+		<cfset var userOS = '' />
+		<cfset var userAgent = cgi.HTTP_USER_AGENT />
+
+		<cfif findNoCase( "Windows", userAgent ) GT 0>
+			<cfset userOS = "Windows" />
+		<cfelseif findNoCase( "Macintosh", userAgent ) GT 0>
+			<cfset userOS = "Macintosh" />
+		<cfelseif findNoCase( "Linux", userAgent ) GT 0>
+			<cfset userOS = "Linux" />
+		</cfif>
+
+		<cfreturn userOS />
+
+	</cffunction>
+
 <!--- CONSOLE FUNCTIONS END --->
+
+<!--- CFZIP REPLACEMENT BECAUSE MACINTOSH --->
+
+<cffunction name="getByteArray" returnType="binary" output="no">
+	<cfargument name="size" type="numeric" required="true"/>
+	<cfset var emptyByteArray =
+	createObject("java", "java.io.ByteArrayOutputStream").init().toByteArray()/>
+	<cfset var byteClass = emptyByteArray.getClass().getComponentType()/>
+	<cfset var byteArray =
+	createObject("java","java.lang.reflect.Array").newInstance(byteClass, arguments.size)/>
+ 
+	<cfreturn byteArray />
+</cffunction>
+
+<cffunction name = "unzip" returntype = "any" output = "false"
+			hint = "Unzips a zip file">
+	<cfargument name = "zipFileLocation" 	type = "string" required = "true" />
+	<cfargument name = "destination"		type = "string"	required = "true" />
+
+	<cfscript>
+		content = ArrayNew(1);
+		FileOutputStream = createObject('java',"java.io.FileOutputStream");
+		BufferedOutputStream = createObject('java',"java.io.BufferedOutputStream");
+		ZipFile = createObject('java',"java.util.zip.ZipFile");
+		ioFile = createObject('java',"java.io.File");
+		Byte = createObject('java',"java.lang.Byte");
+ 
+		buffer = getByteArray(1024);
+		length = 0;
+ 
+		zipFileName = arguments.zipFileLocation;
+		dest = arguments.destination;
+ 
+		zFile = ZipFile.init(zipFileName);
+		entries = zFile.entries();
+ 
+		while(entries.hasMoreElements()) {
+			entry = entries.nextElement();
+ 
+			if(entry.isDirectory()) {
+				// Assume directories are stored parents first then children.
+				ioFile.init(dest & entry.getName()).mkdir();
+				continue;
+			}
+			inStream = zipFile.getInputStream(entry);
+			outStream = BufferedOutputStream.init(FileOutputStream.init(dest & entry.getName()));
+ 
+			length = inStream.read(buffer);
+			while(length gte 0) {
+				 outStream.write(buffer, 0, length);
+				 length = inStream.read(buffer);
+			}
+ 
+			inStream.close();
+			outStream.close();
+		}
+ 
+		zFile.close();
+	</cfscript>
+
+</cffunction>
+
+<!--- CFZIP REPLACEMENT END --->
 
 
 
