@@ -149,8 +149,6 @@
 			<cfcase  value = "main.newSite">
 				<!--- I show the form to create a new site --->
 
-				<!---<cfset gitPath = getGitLocation( cgi.HTTP_USER_AGENT ) />--->
-
 				#getMainNewSite()#
 				
 			</cfcase>
@@ -339,19 +337,6 @@
 
 
 			<cfform name = "frmInstallNewSite" action = "?action=main.createSite">
-				
-			<!---	<cfoutput>#cgi.HTTP_USER_AGENT#<br/>
-				[#gitPath#]<br/>
-
-
-		[[<cfexecute 
-			name = "which"
-			arguments = "-a git"
-			timeout = "30" />]]
-
-
-
-				</cfoutput>--->
 
 			        <!-- First row of columns -->
 			        <div class = "row">
@@ -369,7 +354,6 @@
 
 						<h3>Where should I create the repo?</h3>
 						<p>So far Bitbucket is supported, GitHub coming.</p>
-			            <p>You will need to enter the full path to your Git executable in order to check out the repository. To locate it, either enter "which git"(Linux) or "where git"(Windows) at the terminal or command line.</p>
 
 			            <div class = "clearfix">
 			            	<label>Repository Location?</label>
@@ -388,12 +372,6 @@
 					            		</label>
 					            	</li>
 					            </ul>
-			            	</div>
-			            </div>
-			            <div class = "clearfix">
-				            <label for = "gitPath">Full Path to Git:</label>
-				            <div class = "input">
-				            	<cfinput class = "xlarge" id = "gitPath" name = "gitPath" size = "30" type = "text"  value = "git" />
 			            	</div>
 			            </div>
 			            <div class = "clearfix">
@@ -506,47 +484,17 @@
 				</cfif>
 
 				<cfif arguments.checkOutRepo>
-						<!--- Shorten the arguments string a little.. --->
-						<cfset user = arguments.repoUsername />
-						<cfset pass = arguments.repoPassword / >
-						<!--- Has to be lowercase or Git won't check it out successfully --->
-						<cfset project = lcase( arguments.folderName ) />
-						<cfset directory = arguments.installPath />
-						<cfset cloneRepository( user, pass, project, directory, arguments.dcvsType ) />
+					<!--- Shorten the arguments string a little.. --->
+					<cfset user = arguments.repoUsername />
+					<cfset pass = arguments.repoPassword / >
+					<!--- Has to be lowercase or Git won't check it out successfully --->
+					<cfset project = lcase( arguments.folderName ) />
+					<cfset directory = arguments.installPath />
+					<cfset cloneRepository( user, pass, project, directory, arguments.dcvsType ) />
 				</cfif>
 
 
 	</cffunction>
-
-	<cffunction name = "getGitLocation"  returntype = "any"  output = "false"
-				hint = "I return the location of git locally">
-
-				<cfargument 	name = "userAgent" 	type = "string" 	required = "true"  default = "#cgi.HTTP_USER_AGENT#"
-								hint = "The User agent" />		
-
-		<cfif 		findNoCase( "Windows" , arguments.userAgent ) GT 0>
-			<cfset gitSearchCommand = "where" />
-		<cfelseif 	findNoCase( "Macintosh" , arguments.userAgent ) GT 0>
-			<cfset gitSearchCommand = "which" />
-		<cfelseif 	findNoCase( "Linux", arguments.userAgent ) GT 0>
-			<cfset gitSearchCommand = "which" />
-		</cfif>
-	
-		<cfexecute 
-			name = "#gitSearchCommand#"
-			arguments = "git"
-			variable = "returnedGitPath"
-			timeout = "30" />
-
-		<cfif len( returnedGitPath ) LT 1>
-			<cfset returnedGitPath = "blank returned!" />
-		</cfif>
-
-		<cfreturn returnedGitPath />
-		
-	</cffunction>
-
-
 
 	<!--- CREATE BITBUCKET REPO FUNCTIONS END --->
 
@@ -679,8 +627,7 @@
 		<cfargument name = "dcvs"		type = "string"	required = "true" />
 
 		<cfset var runtime = createObject( 'java', 'java.lang.Runtime' ).getRuntime() />
-		<cfset var userOS = getOS() />
-		<cfset var command = '' />
+		<cfset var command = getGitName() />
 		<cfset var process = '' />
 		<cfset var args = '' />
 
@@ -690,14 +637,8 @@
 			<cfset args = 'clone https://#arguments.user#:#arguments.pass#@github.com/#arguments.user#/#arguments.project#.git #arguments.directory#' />
 		</cfif>
 
-		<cfif reFindNoCase( 'Windows', userOS )>
-			<cfset command = 'git.cmd ' & args />
-		<cfelse>
-			<cfset command = 'git ' & args />
-		</cfif>
-
 		<cftry>
-			<cfset process = runtime.exec( command ) />
+			<cfset process = runtime.exec( command & ' ' & args ).waitFor() />
 
 			<cfcatch type="java.io.IOException">
 				<cfreturn cfcatch.message />
@@ -706,12 +647,21 @@
 
 	</cffunction>
 
-	<cffunction name = "getOS" returntype = "string" output = "false"
-					hint = "I return the name of the user's operating system">
+	<cffunction name = "getGitName" returntype = "string" output = "false"
+					hint = "I return the name we should use to call git">
 
-			<cfset var sys = createObject( 'java', 'java.lang.System' ) />
+		<cfset var name = '' />
+		<cfset var userAgent = cgi.HTTP_USER_AGENT />
 
-			<cfreturn sys.getProperty( 'os.name' ) />
+		<cfif findNoCase( "Windows" , userAgent ) GT 0>
+			<cfset name = "git.cmd" />
+		<cfelseif 	findNoCase( "Macintosh" , userAgent ) GT 0>
+			<cfset name = "git" />
+		<cfelseif 	findNoCase( "Linux", userAgent ) GT 0>
+			<cfset name = "git" />
+		</cfif>
+
+		<cfreturn name />
 
 	</cffunction>
 
