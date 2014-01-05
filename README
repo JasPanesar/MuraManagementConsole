@@ -34,6 +34,10 @@ POTENTIAL CAVEATS:
 
 - MMC would have to be installed in your webroot so you can use it via a browser to deploy more Mura instances.
 
+CONTRIBUTIONS:
+
+- You're welcome to chip in and contribute.  This may not be a common need but I don't think I'm alone :)
+
 REQUIREMENTS:
 
 - Access to read, write and create directories where installed.  Linux friends chmod liberally
